@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "pensieve": {
+      "command": "/path/to/pensieve-mcp/run_server_api.sh",
+      "env": {
+        "PENSIEVE_API_URL": "https://emjay-api.YOUR_CONTAINER_APP_URL.koreacentral.azurecontainerapps.io"
+      }
+    }
+  }
+}

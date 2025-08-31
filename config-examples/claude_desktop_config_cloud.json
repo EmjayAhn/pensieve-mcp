@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "pensieve": {
+      "command": "/Users/emjayahn/Documents/01_dev/ai-graduate-school/project-2025/pensieve-mcp/run_server_api.sh",
+      "env": {
+        "PENSIEVE_API_URL": "https://your-api-url.azurecontainerapps.io"
+      }
+    }
+  }
+}
