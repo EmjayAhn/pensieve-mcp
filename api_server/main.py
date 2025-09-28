@@ -307,13 +307,13 @@ async def conversation_detail(conversation_id: str):
     with open("static/conversation.html", "r", encoding="utf-8") as f:
         return HTMLResponse(content=f.read())
 
-@app.get("/features.html", response_class=HTMLResponse)
-async def features_page():
-    """기능 안내 페이지"""
-    with open("static/features.html", "r", encoding="utf-8") as f:
+@app.get("/guide", response_class=HTMLResponse)
+async def guide_page():
+    """사용 가이드 페이지"""
+    with open("static/guide.html", "r", encoding="utf-8") as f:
         return HTMLResponse(content=f.read())
 
-@app.get("/setup.html", response_class=HTMLResponse)
+@app.get("/setup", response_class=HTMLResponse)
 async def setup_page():
     """MCP 설정 가이드 페이지"""
     with open("static/setup.html", "r", encoding="utf-8") as f:
@@ -346,21 +346,24 @@ async def api_get_conversations(
     current_user: dict = Depends(get_current_user)
 ):
     """사용자의 대화 목록 조회"""
-    cursor = conversations_collection.find(
-        {"user_id": current_user["_id"]}
-    ).sort("created_at", -1).limit(limit).skip(skip)
+    try:
+        cursor = conversations_collection.find(
+            {"user_id": current_user["_id"]}
+        ).sort("created_at", -1).limit(limit).skip(skip)
 
-    conversations = []
-    async for conv in cursor:
-        conversations.append({
-            "id": conv["_id"],
-            "messages": conv.get("messages", []),
-            "metadata": conv.get("metadata", {}),
-            "created_at": conv["created_at"],
-            "updated_at": conv["updated_at"]
-        })
+        conversations = []
+        async for conv in cursor:
+            conversations.append({
+                "id": str(conv["_id"]),
+                "messages": conv.get("messages", []),
+                "metadata": conv.get("metadata", {}),
+                "created_at": conv.get("created_at"),  # .get() 사용으로 안전하게
+                "updated_at": conv.get("updated_at")   # .get() 사용으로 안전하게
+            })
 
-    return conversations
+        return conversations
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
 
 @app.get("/api/conversations/{conversation_id}")
 async def api_get_conversation(

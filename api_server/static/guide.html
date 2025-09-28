@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pensieve - 사용 가이드</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-xl font-bold text-indigo-600">🔮 Pensieve</h1>
+                    </div>
+                    <div class="hidden sm:block ml-6">
+                        <div class="flex space-x-4">
+                            <a href="/dashboard" class="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">
+                                <i class="fas fa-chart-bar mr-1"></i> 대시보드
+                            </a>
+                            <a href="#" class="text-indigo-600 hover:text-indigo-900 px-3 py-2 rounded-md text-sm font-medium">
+                                <i class="fas fa-book mr-1"></i> 사용 가이드
+                            </a>
+                            <a href="/setup" class="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">
+                                <i class="fas fa-cog mr-1"></i> MCP 설정
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span id="username" class="text-gray-700"></span>
+                    <button id="logout-btn" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <!-- Page Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">Pensieve 사용 가이드</h1>
+            <p class="text-xl text-gray-600">AI 대화를 효율적으로 관리하는 방법을 알아보세요</p>
+        </div>
+
+        <!-- Features Section -->
+        <div class="mb-16">
+            <h2 class="text-2xl font-bold text-gray-900 mb-8 text-center">✨ 주요 기능</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
+                    <div class="text-indigo-600 text-3xl mb-4">
+                        <i class="fas fa-save"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">자동 저장</h3>
+                    <p class="text-gray-600">모든 AI 대화가 자동으로 저장되어 언제든 다시 확인할 수 있습니다.</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
+                    <div class="text-green-600 text-3xl mb-4">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">강력한 검색</h3>
+                    <p class="text-gray-600">키워드로 과거 대화를 빠르게 검색하고 찾을 수 있습니다.</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
+                    <div class="text-purple-600 text-3xl mb-4">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">태그 관리</h3>
+                    <p class="text-gray-600">대화를 태그로 분류하여 체계적으로 관리하세요.</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
+                    <div class="text-blue-600 text-3xl mb-4">
+                        <i class="fas fa-share-alt"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">공유 기능</h3>
+                    <p class="text-gray-600">중요한 대화를 팀원과 쉽게 공유할 수 있습니다.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- How to Use Section -->
+        <div class="bg-white rounded-xl shadow-lg p-8 mb-12">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">📚 사용 방법</h2>
+
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">1. MCP 서버 설정</h3>
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <p class="text-gray-700 mb-2">Claude Desktop 앱에서 MCP 설정을 추가합니다:</p>
+                        <ul class="list-disc list-inside space-y-1 text-gray-600 ml-4">
+                            <li>설정 메뉴에서 Developer → Edit Config 선택</li>
+                            <li>제공된 설정 코드를 복사하여 붙여넣기</li>
+                            <li>Claude 앱 재시작</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">2. 대화 저장하기</h3>
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <p class="text-gray-700 mb-2">Claude와 대화할 때 다음과 같이 말하세요:</p>
+                        <div class="space-y-2">
+                            <code class="block bg-gray-800 text-green-400 p-3 rounded">
+                                "Pensieve에 이 대화를 저장해줘"
+                            </code>
+                            <code class="block bg-gray-800 text-green-400 p-3 rounded">
+                                "이 대화를 'Python 학습'이라는 제목으로 저장해줘"
+                            </code>
+                            <code class="block bg-gray-800 text-green-400 p-3 rounded">
+                                "'React 컴포넌트 설계'로 저장하고 태그는 'react', 'frontend'로 해줘"
+                            </code>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-2">💡 자연스럽게 말하면 Claude가 적절한 제목과 태그를 제안해줍니다!</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">3. 대화 검색하기</h3>
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <p class="text-gray-700 mb-2">저장된 대화를 찾고 싶을 때:</p>
+                        <div class="space-y-2">
+                            <code class="block bg-gray-800 text-green-400 p-3 rounded">
+                                "Pensieve에서 Python 관련 대화를 찾아줘"
+                            </code>
+                            <code class="block bg-gray-800 text-green-400 p-3 rounded">
+                                "저장된 대화 중에서 '리액트'가 포함된 것들 보여줘"
+                            </code>
+                            <code class="block bg-gray-800 text-green-400 p-3 rounded">
+                                "지난주에 저장한 대화들을 불러와줘"
+                            </code>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-2">웹 대시보드에서도 검색 기능을 사용할 수 있습니다.</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">4. 태그로 찾기</h3>
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <p class="text-gray-700 mb-2">특정 주제의 대화만 보고 싶을 때:</p>
+                        <div class="space-y-2">
+                            <code class="block bg-gray-800 text-green-400 p-3 rounded">
+                                "javascript 태그가 달린 대화들 보여줘"
+                            </code>
+                            <code class="block bg-gray-800 text-green-400 p-3 rounded">
+                                "프로그래밍 관련 대화만 골라서 보여줘"
+                            </code>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-2">태그를 활용하면 주제별로 체계적으로 대화를 정리할 수 있습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tips Section -->
+        <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-8 mb-12">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">💡 활용 팁</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-lightbulb text-yellow-500 text-xl mt-1"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h4 class="font-semibold text-gray-900 mb-1">의미있는 제목 사용</h4>
+                        <p class="text-gray-600">나중에 쉽게 찾을 수 있도록 대화 내용을 잘 설명하는 제목을 사용하세요.</p>
+                    </div>
+                </div>
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-folder text-blue-500 text-xl mt-1"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h4 class="font-semibold text-gray-900 mb-1">태그로 체계적 정리</h4>
+                        <p class="text-gray-600">프로젝트, 주제, 날짜 등 다양한 태그를 활용해 대화를 분류하세요.</p>
+                    </div>
+                </div>
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-clock text-green-500 text-xl mt-1"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h4 class="font-semibold text-gray-900 mb-1">정기적인 정리</h4>
+                        <p class="text-gray-600">주기적으로 오래된 대화를 정리하고 중요한 내용은 별도로 백업하세요.</p>
+                    </div>
+                </div>
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-users text-purple-500 text-xl mt-1"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h4 class="font-semibold text-gray-900 mb-1">팀 협업 활용</h4>
+                        <p class="text-gray-600">팀원과 지식을 공유하고 함께 문제를 해결하는 데 활용하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Support Section -->
+        <div class="text-center">
+            <p class="text-gray-600 mb-4">추가 도움이 필요하신가요?</p>
+            <div class="flex justify-center space-x-4">
+                <a href="https://github.com/EmjayAhn/pensieve-mcp" class="inline-flex items-center px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition">
+                    <i class="fab fa-github mr-2"></i> GitHub
+                </a>
+                <a href="#" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                    <i class="fas fa-envelope mr-2"></i> 문의하기
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 사용자 정보 표시 (로그인한 경우에만)
+        const username = localStorage.getItem('username');
+        const usernameEl = document.getElementById('username');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        if (username && usernameEl) {
+            usernameEl.textContent = username;
+
+            // 로그아웃 버튼 표시
+            if (logoutBtn) {
+                logoutBtn.style.display = 'block';
+                logoutBtn.addEventListener('click', () => {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('username');
+                    window.location.href = '/';
+                });
+            }
+        } else {
+            // 로그인하지 않은 경우 로그아웃 버튼 숨기기
+            if (usernameEl) usernameEl.style.display = 'none';
+            if (logoutBtn) logoutBtn.style.display = 'none';
+        }
+    </script>
+</body>
+</html>

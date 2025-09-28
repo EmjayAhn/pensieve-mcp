@@ -58,6 +58,33 @@ function setupEventListeners() {
     searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') handleSearch();
     });
+
+    // Navigation links
+    const dashboardLink = document.getElementById('dashboard-link');
+    const guideLink = document.getElementById('guide-link');
+    const setupLink = document.getElementById('setup-link');
+
+    if (dashboardLink) {
+        dashboardLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Already on dashboard, just reload conversations
+            loadConversations();
+        });
+    }
+
+    if (guideLink) {
+        guideLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = '/guide';
+        });
+    }
+
+    if (setupLink) {
+        setupLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = '/setup';
+        });
+    }
 }
 
 // Authentication functions
