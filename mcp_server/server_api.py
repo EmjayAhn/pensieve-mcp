@@ -217,7 +217,7 @@ async def call_tool(name: str, arguments: Dict[str, Any]) -> List[TextContent]:
                         type="text",
                         text=f"로그인 실패: {response.text}"
                     )]
-        
+
         elif name == "register":
             async with httpx.AsyncClient(base_url=API_BASE_URL) as client:
                 response = await client.post(
