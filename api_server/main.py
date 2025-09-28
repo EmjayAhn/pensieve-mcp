@@ -1,6 +1,8 @@
 from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, EmailStr, validator
 from typing import List, Optional, Dict, Any
 from datetime import datetime, timedelta
@@ -286,9 +288,103 @@ async def search_conversations(
     
     return results
 
-@app.get("/")
-async def root():
-    return {"message": "Pensieve API", "version": "1.0.0"}
+# 웹 페이지 라우트
+@app.get("/", response_class=HTMLResponse)
+async def dashboard():
+    """메인 대시보드 페이지"""
+    with open("static/index.html", "r", encoding="utf-8") as f:
+        return HTMLResponse(content=f.read())
+
+@app.get("/dashboard", response_class=HTMLResponse)
+async def dashboard():
+    """대화 관리 대시보드"""
+    with open("static/dashboard.html", "r", encoding="utf-8") as f:
+        return HTMLResponse(content=f.read())
+
+@app.get("/conversation/{conversation_id}", response_class=HTMLResponse)
+async def conversation_detail(conversation_id: str):
+    """대화 상세 페이지"""
+    with open("static/conversation.html", "r", encoding="utf-8") as f:
+        return HTMLResponse(content=f.read())
+
+@app.get("/features.html", response_class=HTMLResponse)
+async def features_page():
+    """기능 안내 페이지"""
+    with open("static/features.html", "r", encoding="utf-8") as f:
+        return HTMLResponse(content=f.read())
+
+@app.get("/setup.html", response_class=HTMLResponse)
+async def setup_page():
+    """MCP 설정 가이드 페이지"""
+    with open("static/setup.html", "r", encoding="utf-8") as f:
+        return HTMLResponse(content=f.read())
+
+# API 라우트 (프론트엔드에서 사용)
+@app.get("/api/me")
+async def get_current_user_info(current_user: dict = Depends(get_current_user)):
+    """현재 로그인한 사용자 정보"""
+    return {
+        "id": current_user["_id"],
+        "email": current_user["email"],
+        "created_at": current_user["created_at"]
+    }
+
+@app.post("/api/login")
+async def api_login(user: UserLogin):
+    """로그인 API"""
+    return await login(user)
+
+@app.post("/api/register")
+async def api_register(user: UserCreate):
+    """회원가입 API"""
+    return await register(user)
+
+@app.get("/api/conversations")
+async def api_get_conversations(
+    limit: int = 20,
+    skip: int = 0,
+    current_user: dict = Depends(get_current_user)
+):
+    """사용자의 대화 목록 조회"""
+    cursor = conversations_collection.find(
+        {"user_id": current_user["_id"]}
+    ).sort("created_at", -1).limit(limit).skip(skip)
+
+    conversations = []
+    async for conv in cursor:
+        conversations.append({
+            "id": conv["_id"],
+            "messages": conv.get("messages", []),
+            "metadata": conv.get("metadata", {}),
+            "created_at": conv["created_at"],
+            "updated_at": conv["updated_at"]
+        })
+
+    return conversations
+
+@app.get("/api/conversations/{conversation_id}")
+async def api_get_conversation(
+    conversation_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """특정 대화 상세 조회"""
+    return await get_conversation(conversation_id, current_user)
+
+@app.delete("/api/conversations/{conversation_id}")
+async def api_delete_conversation(
+    conversation_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """대화 삭제"""
+    return await delete_conversation(conversation_id, current_user)
+
+# 기존 API 호환성을 위한 라우트
+@app.get("/health")
+async def health_check():
+    return {"message": "Pensieve API", "version": "1.0.0", "status": "healthy"}
+
+# 정적 파일 서빙 (라우터들 이후에 마운트)
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 if __name__ == "__main__":
     import uvicorn

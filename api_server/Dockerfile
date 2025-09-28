@@ -8,6 +8,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # 앱 복사
 COPY main.py .
+COPY static/ ./static/
 
 # 환경 변수
 ENV PORT=8000
