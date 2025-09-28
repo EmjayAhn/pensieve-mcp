@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP 설정 가이드 - Pensieve</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+        }
+        .step-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-gray-900">🔮 Pensieve</a>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="/features.html" class="text-gray-700 hover:text-gray-900 font-medium">기능 안내</a>
+                    <a href="/setup.html" class="text-indigo-600 font-medium">MCP 설정</a>
+                    <button id="login-btn" class="text-gray-700 hover:text-gray-900 font-medium">
+                        로그인
+                    </button>
+                    <button id="register-btn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-200">
+                        시작하기
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <section class="bg-gradient-to-br from-purple-50 to-indigo-50 py-16">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                <span class="text-indigo-600">MCP 설정</span> 가이드
+            </h1>
+            <p class="text-xl text-gray-600 leading-relaxed mb-6">
+                Claude Code에서 Pensieve MCP를 설정하는 방법을 단계별로 설명합니다
+            </p>
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 max-w-2xl mx-auto">
+                <h3 class="text-lg font-semibold text-gray-900 mb-3">🚀 빠른 설정 요약</h3>
+                <ol class="text-gray-600 space-y-1">
+                    <li><strong>1단계:</strong> (선택) 웹사이트에서 계정 생성 또는 Claude에서 직접 생성</li>
+                    <li><strong>2단계:</strong> Claude Code 설정 파일에 MCP 서버 추가</li>
+                    <li><strong>3단계:</strong> Claude Code 재시작하고 연결 확인</li>
+                </ol>
+            </div>
+        </div>
+    </section>
+
+    <!-- Setup Guide -->
+    <section class="py-16">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <!-- Prerequisites -->
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-12">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-info-circle text-blue-600 text-xl"></i>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-lg font-medium text-blue-900 mb-2">시작하기 전에</h3>
+                        <ul class="text-blue-800 space-y-1">
+                            <li>• Claude Code (Desktop App) 설치 필요</li>
+                            <li>• Python 3.x 설치 확인</li>
+                            <li>• Pensieve MCP 서버 파일 다운로드</li>
+                            <li>• 인터넷 연결 확인</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-12">
+                <!-- Step 1 -->
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 mr-6">
+                        <div class="step-number w-12 h-12 rounded-full text-white flex items-center justify-center text-xl font-bold">
+                            1
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-4">Pensieve 계정 준비 (선택사항)</h2>
+                        <p class="text-gray-600 mb-4">
+                            계정은 두 가지 방법으로 생성할 수 있습니다. 웹사이트에서 미리 가입하거나, Claude Code에서 대화 중에 바로 생성할 수도 있습니다.
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-blue-50 rounded-lg border border-blue-200 p-4">
+                                <h3 class="font-medium text-blue-900 mb-2">방법 1: 웹사이트 가입</h3>
+                                <p class="text-sm text-blue-800 mb-3">미리 계정을 만들어두고 바로 사용</p>
+                                <button class="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700" onclick="document.getElementById('register-modal').classList.remove('hidden')">
+                                    지금 가입하기
+                                </button>
+                            </div>
+                            <div class="bg-green-50 rounded-lg border border-green-200 p-4">
+                                <h3 class="font-medium text-green-900 mb-2">방법 2: Claude Code에서 생성</h3>
+                                <p class="text-sm text-green-800 mb-3">대화 중에 "계정 생성하겠다"고 말하면 바로 생성</p>
+                                <div class="text-sm text-green-700">✨ 더 간편함</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 mr-6">
+                        <div class="step-number w-12 h-12 rounded-full text-white flex items-center justify-center text-xl font-bold">
+                            2
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-4">Claude Code 설정 파일 편집</h2>
+                        <p class="text-gray-600 mb-4">
+                            Claude Code의 설정 파일에 Pensieve MCP 서버를 추가합니다.
+                        </p>
+
+                        <div class="space-y-4">
+                            <div>
+                                <h3 class="font-semibold text-gray-900 mb-2">설정 파일 위치:</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="bg-gray-100 rounded-lg p-3">
+                                        <div class="font-medium text-sm text-gray-900 mb-1">macOS</div>
+                                        <code class="text-sm text-gray-700">~/Library/Application Support/Claude/claude_desktop_config.json</code>
+                                    </div>
+                                    <div class="bg-gray-100 rounded-lg p-3">
+                                        <div class="font-medium text-sm text-gray-900 mb-1">Windows</div>
+                                        <code class="text-sm text-gray-700">%APPDATA%\Claude\claude_desktop_config.json</code>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 class="font-semibold text-gray-900 mb-2">설정 파일 내용:</h3>
+                                <div class="code-block">
+<pre><code class="language-json">{
+  "mcpServers": {
+    "pensieve": {
+      "command": "python3",
+      "args": ["/path/to/your/server_api.py"],
+      "env": {
+        "PENSIEVE_API_URL": "https://[수정 필요]"
+      }
+    }
+  }
+}</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                <div class="flex items-start">
+                                    <i class="fas fa-info-circle text-blue-600 mt-1 mr-3"></i>
+                                    <div>
+                                        <div class="font-medium text-blue-800">설정 포인트</div>
+                                        <div class="text-blue-700 text-sm mt-1">
+                                            • <code>/path/to/your/server_api.py</code>를 실제 MCP 서버 파일 경로로 변경하세요<br>
+                                            • API URL은 이미 올바르게 설정되어 있습니다<br>
+                                            • 로그인 정보는 Claude와의 대화 중에 처리됩니다
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 mr-6">
+                        <div class="step-number w-12 h-12 rounded-full text-white flex items-center justify-center text-xl font-bold">
+                            3
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-4">Claude Code 재시작 및 연결 확인</h2>
+                        <p class="text-gray-600 mb-4">
+                            설정을 완료한 후 Claude Code를 재시작하고 MCP 연결을 확인합니다.
+                        </p>
+
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="bg-white rounded-lg border border-gray-200 p-4">
+                                    <h3 class="font-semibold text-gray-900 mb-3">1. Claude Code 재시작</h3>
+                                    <ul class="text-sm text-gray-600 space-y-1">
+                                        <li>• Claude Code 완전 종료</li>
+                                        <li>• 애플리케이션 다시 실행</li>
+                                        <li>• 설정 파일 자동 로드</li>
+                                    </ul>
+                                </div>
+
+                                <div class="bg-white rounded-lg border border-gray-200 p-4">
+                                    <h3 class="font-semibold text-gray-900 mb-3">2. 연결 상태 확인</h3>
+                                    <ul class="text-sm text-gray-600 space-y-1">
+                                        <li>• MCP 서버 목록에서 "pensieve" 확인</li>
+                                        <li>• 연결 상태 "Connected" 표시</li>
+                                        <li>• 오류 메시지가 없는지 확인</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-lg border border-gray-200 p-4">
+                                <h3 class="font-semibold text-gray-900 mb-3">3. 테스트 대화 진행</h3>
+                                <p class="text-gray-600 mb-3">Claude와 간단한 대화를 나눠보고 Pensieve 웹사이트에서 저장 여부를 확인하세요.</p>
+                                <div class="bg-gray-50 rounded-lg p-3">
+                                    <div class="text-sm text-gray-700">
+                                        <strong>테스트 메시지 예시:</strong><br>
+                                        "안녕하세요! Pensieve MCP 연결 테스트입니다."
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Troubleshooting -->
+                <div class="bg-gray-50 rounded-lg p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                        <i class="fas fa-tools text-gray-600 mr-3"></i>
+                        문제 해결 가이드
+                    </h2>
+
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="font-semibold text-gray-900 mb-2">🔴 MCP 서버가 연결되지 않을 때</h3>
+                            <ul class="text-gray-600 space-y-1 ml-4">
+                                <li>• 설정 파일 JSON 문법 오류 확인</li>
+                                <li>• Node.js 및 npm 설치 여부 확인</li>
+                                <li>• @pensieve/mcp-server 패키지 설치 상태 확인</li>
+                                <li>• Claude Code 로그에서 오류 메시지 확인</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h3 class="font-semibold text-gray-900 mb-2">🔴 대화가 저장되지 않을 때</h3>
+                            <ul class="text-gray-600 space-y-1 ml-4">
+                                <li>• 이메일과 비밀번호 정보 재확인</li>
+                                <li>• 네트워크 연결 상태 확인</li>
+                                <li>• Pensieve 서버 상태 확인</li>
+                                <li>• MCP 서버 로그에서 오류 확인</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h3 class="font-semibold text-gray-900 mb-2">🔴 인증 오류가 발생할 때</h3>
+                            <ul class="text-gray-600 space-y-1 ml-4">
+                                <li>• 이메일 주소와 비밀번호 정확성 확인</li>
+                                <li>• 계정이 활성화되어 있는지 확인</li>
+                                <li>• 비밀번호 재설정 후 다시 시도</li>
+                                <li>• API URL이 올바른지 확인</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                        <div class="flex items-center">
+                            <i class="fas fa-question-circle text-blue-600 mr-3"></i>
+                            <div>
+                                <div class="font-medium text-blue-900">추가 도움이 필요하신가요?</div>
+                                <div class="text-blue-800 text-sm mt-1">
+                                    GitHub Issues나 이메일을 통해 언제든지 문의해주세요. 빠른 시일 내에 도움을 드리겠습니다.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="bg-indigo-600 py-16">
+        <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
+                설정이 완료되셨나요?
+            </h2>
+            <p class="text-xl text-indigo-100 mb-8">
+                이제 Claude와의 모든 대화가 자동으로 저장됩니다
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/dashboard" class="bg-white text-indigo-600 px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors duration-200">
+                    대시보드로 이동
+                </a>
+                <a href="/features.html" class="border-2 border-white text-white px-8 py-3 rounded-lg font-medium hover:bg-white hover:text-indigo-600 transition-colors duration-200">
+                    기능 살펴보기
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-[9999]">
+        <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+            <h2 class="text-2xl font-bold mb-6 text-center">로그인</h2>
+            <form id="login-form">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">이메일</label>
+                    <input
+                        type="email"
+                        id="email"
+                        required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    >
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">비밀번호</label>
+                    <input
+                        type="password"
+                        id="password"
+                        required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    >
+                </div>
+                <button
+                    type="submit"
+                    class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+                    로그인
+                </button>
+                <p class="mt-4 text-center text-sm text-gray-600">
+                    계정이 없으신가요?
+                    <button type="button" id="show-register" class="text-indigo-600 hover:text-indigo-500">회원가입</button>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="register-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-[9999]">
+        <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+            <h2 class="text-2xl font-bold mb-6 text-center">회원가입</h2>
+            <form id="register-form">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">이메일</label>
+                    <input
+                        type="email"
+                        id="register-email"
+                        required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    >
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">비밀번호</label>
+                    <input
+                        type="password"
+                        id="register-password"
+                        required
+                        minlength="6"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    >
+                    <p class="mt-1 text-sm text-gray-500">최소 6자 이상</p>
+                </div>
+                <button
+                    type="submit"
+                    class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+                    회원가입
+                </button>
+                <p class="mt-4 text-center text-sm text-gray-600">
+                    이미 계정이 있으신가요?
+                    <button type="button" id="show-login" class="text-indigo-600 hover:text-indigo-500">로그인</button>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Syntax highlighting
+        hljs.highlightAll();
+
+        // Modal functionality
+        const loginModal = document.getElementById('login-modal');
+        const registerModal = document.getElementById('register-modal');
+
+        document.getElementById('login-btn').addEventListener('click', () => {
+            loginModal.classList.remove('hidden');
+        });
+
+        document.getElementById('show-register').addEventListener('click', () => {
+            loginModal.classList.add('hidden');
+            registerModal.classList.remove('hidden');
+        });
+
+        document.getElementById('show-login').addEventListener('click', () => {
+            registerModal.classList.add('hidden');
+            loginModal.classList.remove('hidden');
+        });
+
+        // Close modals on background click
+        [loginModal, registerModal].forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+        });
+
+        // Close modals on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                loginModal.classList.add('hidden');
+                registerModal.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
